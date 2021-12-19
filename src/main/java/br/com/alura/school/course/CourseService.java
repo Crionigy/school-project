@@ -18,11 +18,10 @@ public class CourseService {
     }
 
     public Course findByCode(String code){
-        Optional<Course> course = courseRepository.findByCode(code);
-
-        if (course.isPresent()) {
+        try {
+            Optional<Course> course = courseRepository.findByCode(code);
             return course.get();
-        } else {
+        } catch (Exception e){
             throw new ResponseStatusException(NOT_FOUND, format("Invalid code"));
         }
 

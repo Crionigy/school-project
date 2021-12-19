@@ -24,7 +24,8 @@ class CourseController {
 
     @GetMapping("/courses")
     ResponseEntity<List<CourseResponse>> allCourses() {
-        return ResponseEntity.ok().build();
+        List<CourseResponse> ListCourseResponses = CourseResponse.makeListCourseResponse(courseRepository.findAll());
+        return ResponseEntity.ok(ListCourseResponses);
     }
 
     @GetMapping("/courses/{code}")
