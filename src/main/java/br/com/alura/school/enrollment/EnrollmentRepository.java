@@ -9,4 +9,6 @@ interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
 
     List<Enrollment> findByUser(User user);
 
+    Long countByUser(User user);
+
 }

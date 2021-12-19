@@ -2,6 +2,7 @@ package br.com.alura.school.enrollment;
 
 import br.com.alura.school.course.Course;
 import br.com.alura.school.course.CourseService;
+import br.com.alura.school.enrollment.DTO.EnrollmentReport;
 import br.com.alura.school.enrollment.DTO.NewEnrollmentRequest;
 import br.com.alura.school.user.User;
 import br.com.alura.school.user.UserService;
@@ -36,6 +37,13 @@ class EnrollmentService {
         } else {
             throw new ResponseStatusException(BAD_REQUEST, "User is already enrolled in the informed course");
         }
+    }
+
+    List<EnrollmentReport> enrollmentReport() {
+        List<User> users = userService.findAll();
+        List<EnrollmentReport> reports= new ArrayList<EnrollmentReport>();
+        users.forEach( user -> reports.add(new EnrollmentReport(user.getEmail() ,enrollmentRepository.countByUser(user))));
+        return reports;
     }
 
     private boolean validateIfEnrollmentExists(Long id, String code) {

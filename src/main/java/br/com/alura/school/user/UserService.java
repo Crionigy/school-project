@@ -3,6 +3,7 @@ package br.com.alura.school.user;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
 import static java.lang.String.format;
@@ -25,6 +26,10 @@ public class UserService {
         } else {
             throw new ResponseStatusException(NOT_FOUND, format("Invalid username"));
         }
+    }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 
 }

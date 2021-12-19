@@ -29,8 +29,13 @@ class EnrollmentController {
 
     @GetMapping("/enrollments/report")
     ResponseEntity<List<EnrollmentReport>> enrollmentReport() {
+        List<EnrollmentReport> reports = enrollmentService.enrollmentReport();
 
-        return ResponseEntity.ok().build();
+        if(reports.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.ok(reports);
+        }
     }
 
     @GetMapping("/enrollments/{id}")
