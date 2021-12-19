@@ -10,6 +10,10 @@ public class EnrollmentReport {
     @JsonProperty
     private Long enrollmentsAmount;
 
+    public Long getEnrollmentsAmount() {
+        return enrollmentsAmount;
+    }
+
     public EnrollmentReport(String email, Long enrollmentsAmount) {
         this.email = email;
         this.enrollmentsAmount = enrollmentsAmount;

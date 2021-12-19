@@ -1,7 +1,6 @@
 package br.com.alura.school.course;
 
 import br.com.alura.school.enrollment.Enrollment;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;

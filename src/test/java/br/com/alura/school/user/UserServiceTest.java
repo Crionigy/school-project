@@ -1,55 +1,48 @@
 package br.com.alura.school.user;
 
-
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.jdbc.Sql;
-
-import java.util.ArrayList;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
-@AutoConfigureMockMvc
-@Sql(scripts = "classpath:schema.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 public class UserServiceTest {
-
-    @Autowired
-    private UserRepository userRepository;
-
+    
     @Autowired
     private UserService userService;
+    
+    private List<User> listOfUsers;
 
-    @Test
-    void should_retrieve_user_by_username() throws Exception {
-        User userSaved = userRepository.save(new User("ana", "ana@email.com"));
-        String username = "ana";
-        User userFound = userService.findByUsername(username);
-
-        assertThat(userSaved.getUsername()).isEqualTo(userFound.getUsername());
+    @BeforeEach
+    void setUp() {
+        listOfUsers = userService.findAll();
     }
 
     @Test
-    void should_retrieve_all_courses() throws Exception {
-        List<User> usersSaved = new ArrayList<User>();
-        usersSaved.add(userRepository.save(new User("alex", "alex@email.com")));
-        usersSaved.add(userRepository.save(new User("ana", "ana@email.com")));
+    void should_retrieve_all_users() throws Exception {
+        List<User> listOfUsersFound = userService.findAll();
+        assertEquals(this.listOfUsers, listOfUsersFound);
+    }
 
-        List<User> usersFound = userService.findAll();
+    @Test
+    void should_retrieve_user_by_username() throws Exception {
+        String username = "ana";
+        User userFound = userService.findByUsername(username);
 
-        usersFound.forEach(user -> user.setEnrollments(null));
+        assertThat(username).isEqualTo(userFound.getUsername());
+    }
 
-        assertThat(usersFound, contains(hasProperty("id"),
-                hasProperty("username"),
-                hasProperty("email"),
-                hasProperty("enrollments", is(null))));
-
+    @Test
+    void should_throw_exception_retrieve_user_by_username() throws Exception {
+        String username = "fulano";
+        assertThrows(ResponseStatusException.class,
+                () -> userService.findByUsername(username));
     }
 }

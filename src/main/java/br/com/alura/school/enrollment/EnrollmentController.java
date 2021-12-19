@@ -12,8 +12,7 @@ import java.net.URI;
 import java.util.List;
 
 import static java.lang.String.format;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 class EnrollmentController {
@@ -29,12 +28,11 @@ class EnrollmentController {
 
     @GetMapping("/enrollments/report")
     ResponseEntity<List<EnrollmentReport>> enrollmentReport() {
-        List<EnrollmentReport> reports = enrollmentService.enrollmentReport();
-
-        if(reports.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        } else {
+        try {
+            List<EnrollmentReport> reports = enrollmentService.enrollmentReport();
             return ResponseEntity.ok(reports);
+        } catch (ResponseStatusException e) {
+            throw new ResponseStatusException(NO_CONTENT, e.getReason());
         }
     }
 
@@ -48,7 +46,7 @@ class EnrollmentController {
     ResponseEntity<Void> newEnrollment(@RequestBody @Valid NewEnrollmentRequest newEnrollmentRequest) {
         try {
             Enrollment enrollment = enrollmentService.addNewEnrollment(newEnrollmentRequest);
-            URI location = URI.create(format("/enrollment/%s", enrollment.getId()));
+            URI location = URI.create(format("/enrollments/%s", enrollment.getId()));
             return ResponseEntity.created(location).build();
         } catch (ResponseStatusException e) {
             throw new ResponseStatusException(BAD_REQUEST, e.getReason());

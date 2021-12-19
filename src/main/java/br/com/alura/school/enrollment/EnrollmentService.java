@@ -11,8 +11,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @Service
 class EnrollmentService {
@@ -32,7 +34,6 @@ class EnrollmentService {
         if(!validateIfEnrollmentExists(user.getId(), newEnrollment.getCode())) {
             Course course = courseService.findByCode(newEnrollment.getCode());
             Enrollment enrollment = enrollmentRepository.save(new Enrollment(user, course));
-
             return enrollment;
         } else {
             throw new ResponseStatusException(BAD_REQUEST, "User is already enrolled in the informed course");
@@ -41,9 +42,17 @@ class EnrollmentService {
 
     List<EnrollmentReport> enrollmentReport() {
         List<User> users = userService.findAll();
-        List<EnrollmentReport> reports= new ArrayList<EnrollmentReport>();
-        users.forEach( user -> reports.add(new EnrollmentReport(user.getEmail() ,enrollmentRepository.countByUser(user))));
-        return reports;
+        List<EnrollmentReport> reports = new ArrayList<EnrollmentReport>();
+
+        users.forEach( user -> reports.add(new EnrollmentReport(user.getEmail(), enrollmentRepository.countByUser(user))));
+
+        List<EnrollmentReport> filteredReports = reports.stream().filter(report -> report.getEnrollmentsAmount() != 0).collect(Collectors.toList());
+
+        if(filteredReports.isEmpty()) {
+            throw new ResponseStatusException(NO_CONTENT, "Empty enrollments, can't perform a report!");
+        } else {
+            return filteredReports;
+        }
     }
 
     private boolean validateIfEnrollmentExists(Long id, String code) {

@@ -13,6 +13,11 @@ public class NewEnrollmentRequest {
     @NotBlank
     private String username;
 
+    public NewEnrollmentRequest(String code, String username) {
+        this.code = code;
+        this.username = username;
+    }
+
     public String getCode() {
         return code;
     }
