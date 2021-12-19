@@ -1,5 +1,6 @@
 package br.com.alura.school.user;
 
+import br.com.alura.school.user.DTO.NewUserRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

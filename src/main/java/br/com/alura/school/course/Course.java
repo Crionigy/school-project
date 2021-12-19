@@ -1,19 +1,21 @@
 package br.com.alura.school.course;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import br.com.alura.school.enrollment.Enrollment;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
+import java.util.Set;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
-class Course {
+public class Course {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "id_course")
     private Long id;
 
     @Size(max=10)
@@ -28,25 +30,32 @@ class Course {
 
     private String description;
 
+    @OneToMany(mappedBy = "course")
+    @Column(name="id_enrollment")
+    private Set<Enrollment> enrollments;
+
     @Deprecated
     protected Course() { }
 
-    Course(String code, String name, String description) {
+    public Course(String code, String name, String description) {
         this.code = code;
         this.name = name;
         this.description = description;
     }
 
-    String getCode() {
+    public String getCode() {
         return code;
     }
 
-    String getName() {
+    public String getName() {
         return name;
     }
 
-    String getDescription() {
+    public String getDescription() {
         return description;
     }
 
+    public Long getId() {
+        return id;
+    }
 }

@@ -1,5 +1,7 @@
 package br.com.alura.school.user;
 
+import br.com.alura.school.user.DTO.NewUserRequest;
+import br.com.alura.school.user.DTO.UserResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;

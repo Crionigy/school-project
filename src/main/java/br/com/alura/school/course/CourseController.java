@@ -1,5 +1,7 @@
 package br.com.alura.school.course;
 
+import br.com.alura.school.course.DTO.CourseResponse;
+import br.com.alura.school.course.DTO.NewCourseRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;

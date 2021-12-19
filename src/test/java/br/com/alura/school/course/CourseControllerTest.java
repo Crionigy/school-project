@@ -1,5 +1,6 @@
 package br.com.alura.school.course;
 
+import br.com.alura.school.course.DTO.NewCourseRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
