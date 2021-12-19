@@ -1,6 +1,7 @@
 package br.com.alura.school.user;
 
 import br.com.alura.school.enrollment.Enrollment;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -12,6 +13,7 @@ import java.util.Set;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "enrollments"})
 public class User {
 
     @Id
@@ -29,12 +31,16 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @Column(name="id_enrollment")
     private Set<Enrollment> enrollments;
 
     @Deprecated
     protected User() {}
+
+    public User(Long id) {
+        this.id = id;
+    }
 
     public User(String username, String email) {
         this.username = username;

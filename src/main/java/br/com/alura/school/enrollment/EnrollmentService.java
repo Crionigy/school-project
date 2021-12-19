@@ -6,6 +6,12 @@ import br.com.alura.school.enrollment.DTO.NewEnrollmentRequest;
 import br.com.alura.school.user.User;
 import br.com.alura.school.user.UserService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @Service
 class EnrollmentService {
@@ -22,10 +28,21 @@ class EnrollmentService {
 
     Enrollment addNewEnrollment(NewEnrollmentRequest newEnrollment) {
         User user = userService.findByUsername(newEnrollment.getUsername());
-        Course course = courseService.findByCode(newEnrollment.getCode());
-        Enrollment enrollment = enrollmentRepository.save(new Enrollment(user, course));
+        if(!validateIfEnrollmentExists(user.getId(), newEnrollment.getCode())) {
+            Course course = courseService.findByCode(newEnrollment.getCode());
+            Enrollment enrollment = enrollmentRepository.save(new Enrollment(user, course));
 
-        return enrollment;
+            return enrollment;
+        } else {
+            throw new ResponseStatusException(BAD_REQUEST, "User is already enrolled in the informed course");
+        }
     }
+
+    private boolean validateIfEnrollmentExists(Long id, String code) {
+        List<Enrollment> enrollments = new ArrayList<Enrollment>();
+        enrollments.addAll(enrollmentRepository.findByUser(new User(id)));
+        return enrollments.stream().anyMatch(e -> e.getCourse().getCode().equals(code));
+    }
+
 
 }

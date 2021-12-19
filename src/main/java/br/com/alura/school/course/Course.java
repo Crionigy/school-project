@@ -1,6 +1,7 @@
 package br.com.alura.school.course;
 
 import br.com.alura.school.enrollment.Enrollment;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -11,6 +12,7 @@ import java.util.Set;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "enrollments"})
 public class Course {
 
     @Id
@@ -30,7 +32,7 @@ public class Course {
 
     private String description;
 
-    @OneToMany(mappedBy = "course")
+    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
     @Column(name="id_enrollment")
     private Set<Enrollment> enrollments;
 

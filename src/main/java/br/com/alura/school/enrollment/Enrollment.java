@@ -4,12 +4,14 @@ import javax.persistence.*;
 
 import br.com.alura.school.course.Course;
 import br.com.alura.school.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.Calendar;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "user", "course"})
 public class Enrollment {
 
     @Id
@@ -17,11 +19,11 @@ public class Enrollment {
     @Column(name = "id_enrollment", nullable = false, updatable = false)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_user", nullable = false, updatable = false)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_course", nullable = false, updatable = false)
     private Course course;
 
